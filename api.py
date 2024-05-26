@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 import qdrant_client
 from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_core.messages import HumanMessage
 from langchain_qdrant import Qdrant
 from qdrant_client import QdrantClient
 from pydantic import BaseModel
@@ -8,6 +9,7 @@ import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import environment_var
 import os
+from langgraph.graph import END, MessageGraph
 
 class Item(BaseModel):
     query: str
@@ -102,5 +104,3 @@ async def ask_localai(Item:Item):
     )
     response = tokenizer.decode(outputs[0][input_ids.shape[-1]:])
     return {"context":list_res,"answer":response}
-
-

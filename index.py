@@ -4,7 +4,7 @@ from os import listdir
 from os.path import isfile, join,isdir
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_qdrant import Qdrant
-
+import sys
 from langchain_text_splitters import TokenTextSplitter
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams
@@ -52,4 +52,8 @@ def main_indexing(mypath):
     print("Finished indexing!")
 
 if __name__ == "__main__":
-    main_indexing("TestFolder")
+    arguments = sys.argv
+    if len(arguments)>1:
+        main_indexing(arguments[1])
+    else:
+        print("You need to provide a path to folder with documents to index as command line argument")
