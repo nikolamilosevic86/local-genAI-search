@@ -25,6 +25,8 @@ share/python-wheels/
 .installed.cfg
 *.egg
 MANIFEST
+qdrant/
+environment_var.py
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
