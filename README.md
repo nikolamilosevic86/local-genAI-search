@@ -17,6 +17,19 @@ You will need to install all the requirements:
 pip install -r requirements.txt
 ```
 
+You need to create a file called ``environment_var.py``, and put there
+your HuggingFace API key. The file should look like this:
+
+```python
+import os
+
+hf_token = "hf_you_api_key"
+```
+
+API key can be retrieved at ``https://huggingface.co/settings/tokens``.
+In order to run generative component, you need to request
+access to Llama3 model at ```https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct```
+
 The next step is to index a folder and its subfolders containing
 documents that you would like to search. You can do it using
 the ``index.py`` file. Run
@@ -33,3 +46,52 @@ For this you can run:
 ```commandline
 python uvicorn_start.py
 ```
+
+This will start a local server, that you can query using postman, 
+or send POST requests. Loading of models (including 
+downloading from Huggingface, may take few minutes, 
+especially for the first time). There are two interfaces:
+```commandline
+http://127.0.0.1:8000/search
+```
+
+```commandline
+http://127.0.0.1:8000/ask_localai
+```
+
+Both interfaces need body in a format:
+
+```commandline
+{"query":"What are knowledge graphs?"}
+```
+and headers for Accept and Content-Type set to ``application/json``.
+
+Here is a code example:
+
+```python
+import requests
+import json
+
+url = "http://127.0.0.1:8000/ask_localai"
+
+payload = json.dumps({
+  "query": "What are knowledge graphs?"
+})
+headers = {
+  'Accept': 'application/json',
+  'Content-Type': 'application/json'
+}
+
+response = requests.request("POST", url, headers=headers, data=payload)
+
+print(response.text)
+```
+Finally, streamlit user interface can be started in the following way:
+```commandline
+
+
+```
+
+## Contributors
+
+* [Nikola Milosevic](https://github.com/nikolamilosevic86)
