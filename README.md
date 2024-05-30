@@ -2,7 +2,8 @@
 
 Local GenAI Search is your local generative search engine 
 based on Llama3 8B model that can run localy on 32GB 
-laptop or computer (developed with MacBookPro M2 with 32BG RAM)
+laptop or computer (developed with MacBookPro M2 with 32BG RAM).
+
 
 ## How to run
 
@@ -37,8 +38,12 @@ the ``index.py`` file. Run
 ```commandline
 python index.py path/to/folder
 ```
+As example, you can run it with TestFolder provided:
+```commandline
+python index.py TestFolder
+```
 This will create a qdrant client index locally and index all the files
-in this folder and its subfolders with extensions ```.pdf```
+in this folder and its subfolders with extensions ```.pdf```,```.txt```
 
 The next step would be to run the generative search service.
 For this you can run:
@@ -88,9 +93,19 @@ print(response.text)
 ```
 Finally, streamlit user interface can be started in the following way:
 ```commandline
-
-
+streamlit run user_interface.py
 ```
+
+Now you can use the user interface and ask question that will be 
+answered based on the files on your file system.
+
+## Technology used
+
+- Llama3 8B
+- Langchain
+- Transformers
+- MSMarco IR embedding models
+- PyPDF2
 
 ## Contributors
 

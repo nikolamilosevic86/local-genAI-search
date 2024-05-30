@@ -77,7 +77,7 @@ async def ask_localai(Item:Item):
         i = i +1
 
     rolemsg = {"role": "system",
-               "content": "Answer user's question using documents given in the context. In the context are documents that should contain an answer. Please always reference document id (in squere brackets, for example [0],[1]) of the document that was used to make a claim."}
+               "content": "Answer user's question using documents given in the context. In the context are documents that should contain an answer. Please always reference document id (in squere brackets, for example [0],[1]) of the document that was used to make a claim. Use as many citations and documents as it is necessary to answer question."}
     messages = [
         rolemsg,
         {"role": "user", "content": "Documents:\n"+context+"\n\nQuestion: "+query},

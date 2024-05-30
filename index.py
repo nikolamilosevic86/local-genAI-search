@@ -30,16 +30,28 @@ def main_indexing(mypath):
     )
     client = QdrantClient(path="qdrant/")
     collection_name = "MyCollection"
-    client.create_collection(collection_name,vectors_config=VectorParams(size=768, distance=Distance.COSINE))
+    if client.collection_exists(collection_name):
+        client.delete_collection(collection_name)
+
+    client.create_collection(collection_name,vectors_config=VectorParams(size=768, distance=Distance.DOT))
     qdrant = Qdrant(client, collection_name, hf)
     print("Indexing...")
     onlyfiles = get_files("TestFolder")
     file_content = ""
     for file in onlyfiles:
-        print("indexing "+file)
-        reader = PyPDF2.PdfReader(file)
-        for i in range(0,len(reader.pages)):
-            file_content = file_content + " "+reader.pages[i].extract_text()
+        if file.endswith(".pdf"):
+            print("indexing "+file)
+            reader = PyPDF2.PdfReader(file)
+            for i in range(0,len(reader.pages)):
+                file_content = file_content + " "+reader.pages[i].extract_text()
+        elif file.endswith(".txt"):
+            f = open(file,'r')
+            file_content = f.read()
+            f.close()
+        elif file.endswith(".docx"):
+            pass
+        else:
+            continue
         text_splitter = TokenTextSplitter(chunk_size=500, chunk_overlap=50)
         texts = text_splitter.split_text(file_content)
         metadata = []
