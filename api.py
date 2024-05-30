@@ -9,6 +9,7 @@ import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import environment_var
 import os
+from openai import OpenAI
 from langgraph.graph import END, MessageGraph
 
 class Item(BaseModel):
@@ -24,15 +25,23 @@ hf = HuggingFaceEmbeddings(
     model_kwargs=model_kwargs,
     encode_kwargs=encode_kwargs
 )
-os.environ["HF_TOKEN"] = environment_var.hf_token
 
-model_id = "meta-llama/Meta-Llama-3-8B-Instruct"
-tokenizer = AutoTokenizer.from_pretrained(model_id)
-model = AutoModelForCausalLM.from_pretrained(
-    model_id,
-    torch_dtype=torch.float16,
-    device_map="auto",
-)
+os.environ["HF_TOKEN"] = environment_var.hf_token
+use_nvidia_api = False
+if environment_var.nvidia_key !="":
+    client_ai = OpenAI(
+        base_url="https://integrate.api.nvidia.com/v1",
+        api_key="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"
+    )
+    use_nvidia_api = True
+else:
+    model_id = "meta-llama/Meta-Llama-3-8B-Instruct"
+    tokenizer = AutoTokenizer.from_pretrained(model_id)
+    model = AutoModelForCausalLM.from_pretrained(
+        model_id,
+        torch_dtype=torch.float16,
+        device_map="auto",
+    )
 
 client = QdrantClient(path="qdrant/")
 collection_name = "MyCollection"
@@ -82,25 +91,36 @@ async def ask_localai(Item:Item):
         rolemsg,
         {"role": "user", "content": "Documents:\n"+context+"\n\nQuestion: "+query},
     ]
-    input_ids = tokenizer.apply_chat_template(
-            messages,
-            add_generation_prompt=True,
-            return_tensors="pt"
-        ).to(model.device)
+    if use_nvidia_api:
+        completion = client_ai.chat.completions.create(
+            model="meta/llama3-70b-instruct",
+            messages=messages,
+            temperature=0.5,
+            top_p=1,
+            max_tokens=1024,
+            stream=False
+        )
+        response = completion.choices[0].message.content
+    else:
+        input_ids = tokenizer.apply_chat_template(
+                messages,
+                add_generation_prompt=True,
+                return_tensors="pt"
+            ).to(model.device)
 
 
-    terminators = [
-        tokenizer.eos_token_id,
-        tokenizer.convert_tokens_to_ids("<|eot_id|>")
-        ]
+        terminators = [
+            tokenizer.eos_token_id,
+            tokenizer.convert_tokens_to_ids("<|eot_id|>")
+            ]
 
-    outputs = model.generate(
-        input_ids,
-        max_new_tokens=256,
-        eos_token_id=terminators,
-        do_sample=True,
-        temperature=0.2,
-        top_p=0.9,
-    )
-    response = tokenizer.decode(outputs[0][input_ids.shape[-1]:])
+        outputs = model.generate(
+            input_ids,
+            max_new_tokens=256,
+            eos_token_id=terminators,
+            do_sample=True,
+            temperature=0.2,
+            top_p=0.9,
+        )
+        response = tokenizer.decode(outputs[0][input_ids.shape[-1]:])
     return {"context":list_res,"answer":response}
