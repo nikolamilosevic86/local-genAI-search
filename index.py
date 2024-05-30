@@ -8,7 +8,7 @@ import sys
 from langchain_text_splitters import TokenTextSplitter
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams
-
+import docx
 
 def get_files(dir):
     file_list = []
@@ -18,6 +18,21 @@ def get_files(dir):
         elif isdir(join(dir,f)):
             file_list= file_list + get_files(join(dir,f))
     return file_list
+
+def getTextFromWord(filename):
+    doc = docx.Document(filename)
+    fullText = []
+    for para in doc.paragraphs:
+        fullText.append(para.text)
+    return '\n'.join(fullText)
+
+def getTextFromPPTX(filename):
+    prs = Presentation(file)
+    fullText = []
+    for slide in prs.slides:
+        for shape in slide.shapes:
+            fullText.append(shape.text)
+    return '\n'.join(fullText)
 
 def main_indexing(mypath):
     model_name = "amberoad/bert-multilingual-passage-reranking-msmarco"
@@ -49,7 +64,9 @@ def main_indexing(mypath):
             file_content = f.read()
             f.close()
         elif file.endswith(".docx"):
-            pass
+            file_content = getTextFromWord(file)
+        elif file.endswith(".pptx"):
+            file_content = getTextFromPPTX(file)
         else:
             continue
         text_splitter = TokenTextSplitter(chunk_size=500, chunk_overlap=50)

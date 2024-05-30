@@ -43,7 +43,7 @@ As example, you can run it with TestFolder provided:
 python index.py TestFolder
 ```
 This will create a qdrant client index locally and index all the files
-in this folder and its subfolders with extensions ```.pdf```,```.txt```
+in this folder and its subfolders with extensions ```.pdf```,```.txt```,```.docx```,```.pptx```
 
 The next step would be to run the generative search service.
 For this you can run:

@@ -15,3 +15,5 @@ pydantic==1.10.11
 uvicorn
 accelerate
 streamlit
+python-docx
+python-pptx
