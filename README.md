@@ -3,9 +3,18 @@
 Local GenAI Search is your local generative search engine 
 based on Llama3 model that can run localy on 32GB 
 laptop or computer (developed with MacBookPro M2 with 32BG RAM).
+
+The main goal of the project is that it lets user ask questions 
+about content of their local files, which it answers in 
+concise manner with referencing relevant documents that can be 
+then opened. 
+
+![img.png](img.png)
+
 The engine is using MS MARCO embeddings for semantic search,
-with top documents being passed to  Llama 3 model. By default,
-it would work with NVIDIA API, and use 70B parameter Llama 3 
+with top documents being passed to  Llama 3 model. 
+
+By default, it would work with NVIDIA API, and use 70B parameter Llama 3 
 model. However, if you used all your NVIDIA API credits or 
 do not want to use API for searching your local documents, 
 it can also run locally, using 8B parameter model. 
