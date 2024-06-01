@@ -40,11 +40,14 @@ your HuggingFace API key. The file should look like this:
 import os
 
 hf_token = "hf_you_api_key"
+nvidia_key = "nvapi-your_nvidia_nim_api_key"
 ```
 
-API key can be retrieved at ``https://huggingface.co/settings/tokens``.
+API key for HuggingFace can be retrieved at ``https://huggingface.co/settings/tokens``.
 In order to run generative component, you need to request
 access to Llama3 model at ```https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct```
+
+API key for Nvidia NIM API Endpoint can be retrieved at ```https://build.nvidia.com/explore/discover```
 
 The next step is to index a folder and its subfolders containing
 documents that you would like to search. You can do it using
@@ -117,10 +120,12 @@ answered based on the files on your file system.
 ## Technology used
 
 - Llama3 8B
+- NVIDIA NIM API Endpoints (For Llama 3 70B)
 - Langchain
 - Transformers
 - MSMarco IR embedding models
 - PyPDF2
+
 
 ## Contributors
 
