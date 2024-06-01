@@ -1,0 +1,22 @@
+OWASP Foundation Case # 00007032: OWASP Seraphimdroid
+
+Hello,
+
+I would like to present to you and invite you to review on your blog OWASP Seraphimdroid security application. This application is an Open Source effort to protect users from malware, theft, data leak and to protect their privacy. OWASP Seraphimdroid development was also financially supported during Google Summer of Code 2014 and OWASP Code Summer sprint 2015. 
+
+You may download app from Google play on the following link: https://play.google.com/store/apps/details?id=org.owasp.seraphimdroid
+
+The main project website is: https://www.owasp.org/index.php/OWASP_SeraphimDroid_Project
+
+In order to highligh some of the features I will count only fiew:
++ Permission scanner. Permission scanner will show you the list of all installed application and the permission they are using. Also app will describe potential malicious use of certain permissions. Seraphimdroid is using machine learning in order to predict whether application might be malicious (be a virus, Trojan, worm, rootkit, etc) or not and will notify the user.
++ Application and service locker. With OWASP Seraphimdroid, user may lock access to certain or to all of your applications and system services (WiFi, network, BlueTooth) with password
++ Install lock. This feature can lock all installing and uninstalling action on your device. Great for parental control.
++ Outgoing call and SMS blocker. This feature will allow user to perform normally outgoing calls and SMS, but it will block outgoing calls and inform about outgoing SMS performed by trojan applications.
++ Geo-fencing. This feature allows user to set a location range where the device should be. If the device exits the range it may set up alarm or start sending messages to the defined number with its location.
++ Remote location. If user lost your phone, he is able to send SMS with a defined secret code as a content and his phone and it will reply with the location coordinates of the device.
++ Remote lock and lock
+
+Please let me know if you have any questions.
+
+Hope to hear from you soon.

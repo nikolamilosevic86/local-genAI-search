@@ -1,9 +1,9 @@
 import re
-
+from pathlib import Path
 import streamlit as st
 import requests
 import json
-
+st.title('_:blue[Local GenAI Search]_ :sunglasses:')
 question = st.text_input("Ask a question based on your local files", "")
 if st.button("Ask a question"):
     st.write("The current question is \"", question+"\"")
@@ -37,3 +37,6 @@ if st.button("Ask a question"):
     for doc in show_docs:
         with st.expander(str(doc['id'])+" - "+doc['path']):
             st.write(doc['content'])
+            with open(doc['path'], 'rb') as f:
+                st.download_button("Downlaod file", f, file_name=doc['path'].split('/')[-1]
+            )
