@@ -6,6 +6,7 @@ from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_qdrant import Qdrant
 import sys
 from langchain_text_splitters import TokenTextSplitter
+from pptx import Presentation
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams
 import docx
@@ -27,7 +28,7 @@ def getTextFromWord(filename):
     return '\n'.join(fullText)
 
 def getTextFromPPTX(filename):
-    prs = Presentation(file)
+    prs = Presentation(filename)
     fullText = []
     for slide in prs.slides:
         for shape in slide.shapes:
@@ -35,7 +36,8 @@ def getTextFromPPTX(filename):
     return '\n'.join(fullText)
 
 def main_indexing(mypath):
-    model_name = "amberoad/bert-multilingual-passage-reranking-msmarco"
+    #model_name = "amberoad/bert-multilingual-passage-reranking-msmarco"
+    model_name = "sentence-transformers/msmarco-bert-base-dot-v5"
     model_kwargs = {'device': 'cpu'}
     encode_kwargs = {'normalize_embeddings': True}
     hf = HuggingFaceEmbeddings(
@@ -54,6 +56,7 @@ def main_indexing(mypath):
     onlyfiles = get_files("TestFolder")
     file_content = ""
     for file in onlyfiles:
+        file_content = ""
         if file.endswith(".pdf"):
             print("indexing "+file)
             reader = PyPDF2.PdfReader(file)
@@ -77,7 +80,6 @@ def main_indexing(mypath):
         metadata = []
         for i in range(0,len(texts)):
             metadata.append({"path":file})
-        embeddings = hf.embed_documents(texts)
         qdrant.add_texts(texts,metadatas=metadata)
         len(texts)
     print(onlyfiles)

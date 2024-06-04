@@ -17,7 +17,8 @@ class Item(BaseModel):
     def __init__(self, query: str) -> None:
         super().__init__(query=query)
 
-model_name = "amberoad/bert-multilingual-passage-reranking-msmarco"
+#model_name = "amberoad/bert-multilingual-passage-reranking-msmarco"
+model_name = "sentence-transformers/msmarco-bert-base-dot-v5"
 model_kwargs = {'device': 'cpu'}
 encode_kwargs = {'normalize_embeddings': True}
 hf = HuggingFaceEmbeddings(
@@ -28,12 +29,21 @@ hf = HuggingFaceEmbeddings(
 
 os.environ["HF_TOKEN"] = environment_var.hf_token
 use_nvidia_api = False
+use_quantized = True
 if environment_var.nvidia_key !="":
     client_ai = OpenAI(
         base_url="https://integrate.api.nvidia.com/v1",
         api_key="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"
     )
     use_nvidia_api = True
+elif use_quantized:
+    model_id = "Kameshr/LLAMA-3-Quantized"
+    tokenizer = AutoTokenizer.from_pretrained(model_id)
+    model = AutoModelForCausalLM.from_pretrained(
+        model_id,
+        torch_dtype=torch.float16,
+        device_map="auto",
+    )
 else:
     model_id = "meta-llama/Meta-Llama-3-8B-Instruct"
     tokenizer = AutoTokenizer.from_pretrained(model_id)

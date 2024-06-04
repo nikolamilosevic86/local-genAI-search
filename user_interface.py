@@ -34,9 +34,11 @@ if st.button("Ask a question"):
         for doc in documents:
             if int(doc['id']) == n:
                 show_docs.append(doc)
+    a = 1244
     for doc in show_docs:
         with st.expander(str(doc['id'])+" - "+doc['path']):
             st.write(doc['content'])
             with open(doc['path'], 'rb') as f:
-                st.download_button("Downlaod file", f, file_name=doc['path'].split('/')[-1]
-            )
+                st.download_button("Downlaod file", f, file_name=doc['path'].split('/')[-1],key=a
+                )
+                a = a + 1
