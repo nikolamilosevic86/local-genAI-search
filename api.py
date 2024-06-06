@@ -1,7 +1,7 @@
 from fastapi import FastAPI
-import qdrant_client
+#import qdrant_client
 from langchain_community.embeddings import HuggingFaceEmbeddings
-from langchain_core.messages import HumanMessage
+#from langchain_core.messages import HumanMessage
 from langchain_qdrant import Qdrant
 from qdrant_client import QdrantClient
 from pydantic import BaseModel
@@ -10,7 +10,7 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 import environment_var
 import os
 from openai import OpenAI
-from langgraph.graph import END, MessageGraph
+#from langgraph.graph import END, MessageGraph
 
 class Item(BaseModel):
     query: str
@@ -33,7 +33,7 @@ use_quantized = True
 if environment_var.nvidia_key !="":
     client_ai = OpenAI(
         base_url="https://integrate.api.nvidia.com/v1",
-        api_key="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"
+        api_key=environment_var.nvidia_key
     )
     use_nvidia_api = True
 elif use_quantized:

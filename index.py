@@ -1,4 +1,3 @@
-import qdrant_client
 import PyPDF2
 from os import listdir
 from os.path import isfile, join,isdir
