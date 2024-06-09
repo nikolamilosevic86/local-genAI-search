@@ -52,7 +52,7 @@ def main_indexing(mypath):
     client.create_collection(collection_name,vectors_config=VectorParams(size=768, distance=Distance.DOT))
     qdrant = Qdrant(client, collection_name, hf)
     print("Indexing...")
-    onlyfiles = get_files("TestFolder")
+    onlyfiles = get_files(mypath)
     file_content = ""
     for file in onlyfiles:
         file_content = ""
