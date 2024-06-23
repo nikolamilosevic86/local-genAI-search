@@ -38,6 +38,6 @@ if st.button("Ask a question"):
         with st.expander(str(doc['id'])+" - "+doc['path']):
             st.write(doc['content'])
             with open(doc['path'], 'rb') as f:
-                st.download_button("Downlaod file", f, file_name=doc['path'].split('/')[-1],key=a
+                st.download_button("Download file", f, file_name=doc['path'].split('/')[-1],key=a
                 )
                 a = a + 1
