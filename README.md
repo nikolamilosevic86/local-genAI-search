@@ -126,6 +126,10 @@ answered based on the files on your file system.
 - MSMarco IR embedding models
 - PyPDF2
 
+## Towards Data Science article
+If you want to see more details on development of this tool, you can read 
+[How to Build a Generative Search Engine for Your Local Files Using Llama 3 | Towards Data Science](https://towardsdatascience.com/how-to-build-a-generative-search-engine-for-your-local-files-using-llama-3-399551786965)
+
 
 ## Contributors
 
