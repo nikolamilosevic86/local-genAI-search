@@ -130,6 +130,16 @@ answered based on the files on your file system.
 If you want to see more details on development of this tool, you can read 
 [How to Build a Generative Search Engine for Your Local Files Using Llama 3 | Towards Data Science](https://towardsdatascience.com/how-to-build-a-generative-search-engine-for-your-local-files-using-llama-3-399551786965)
 
+Also, you can check the following papers:
+```
+@article{kovsprdic2024verif,
+  title={Verif.ai: Towards an Open-Source Scientific Generative Question-Answering System with Referenced and Verifiable Answers},
+  author={Ko{\v{s}}prdi{\'c}, Milo{\v{s}} and Ljaji{\'c}, Adela and Ba{\v{s}}aragin, Bojana and Medvecki, Darija and Milo{\v{s}}evi{\'c}, Nikola},
+  journal={arXiv preprint arXiv:2402.18589},
+  year={2024}
+}
+```
+
 
 ## Contributors
 
