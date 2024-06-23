@@ -61,7 +61,7 @@ def main_indexing(mypath):
             reader = PyPDF2.PdfReader(file)
             for i in range(0,len(reader.pages)):
                 file_content = file_content + " "+reader.pages[i].extract_text()
-        elif file.endswith(".txt"):
+        elif file.endswith(".txt") or file.endswith(".md") or file.endswith(".markdown"):
             print("indexing " + file)
             f = open(file,'r')
             file_content = f.read()
