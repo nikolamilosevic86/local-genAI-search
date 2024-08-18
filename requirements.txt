@@ -18,3 +18,11 @@ streamlit
 python-docx
 python-pptx
 openai
+
+#Added by pdchristian
+PyCryptodome
+torchvision 
+torchaudio #--index-url https://download.pytorch.org/whl/cu118
+
+#langchain-huggingface #will replace HuggingFaceEmbeddings
+#QdrantVectorStore #will replace qdrant

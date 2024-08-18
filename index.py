@@ -1,6 +1,7 @@
 import PyPDF2
 from os import listdir
-from os.path import isfile, join,isdir
+from os.path import isfile, join, isdir
+import os
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_qdrant import Qdrant
 import sys
@@ -10,13 +11,20 @@ from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams
 import docx
 
+#def get_files(dir):
+#    file_list = []
+#    for f in listdir(dir):
+#        if isfile(join(dir,f)):
+#            file_list.append(join(dir,f))
+#        elif isdir(join(dir,f)):
+#            file_list= file_list + get_files(join(dir,f))
+#    return file_list
+
 def get_files(dir):
     file_list = []
-    for f in listdir(dir):
-        if isfile(join(dir,f)):
-            file_list.append(join(dir,f))
-        elif isdir(join(dir,f)):
-            file_list= file_list + get_files(join(dir,f))
+    for dir, _, filenames in os.walk(dir):
+        for f in filenames:
+           file_list.append(os.path.join(dir, f))
     return file_list
 
 def getTextFromWord(filename):
@@ -37,6 +45,7 @@ def getTextFromPPTX(filename):
 def main_indexing(mypath):
     #model_name = "amberoad/bert-multilingual-passage-reranking-msmarco"
     model_name = "sentence-transformers/msmarco-bert-base-dot-v5"
+    #model_kwargs = {'device': 'cuda'}
     model_kwargs = {'device': 'cpu'}
     encode_kwargs = {'normalize_embeddings': True}
     hf = HuggingFaceEmbeddings(
@@ -56,14 +65,21 @@ def main_indexing(mypath):
     file_content = ""
     for file in onlyfiles:
         file_content = ""
-        if file.endswith(".pdf"):
+        if file.find("~") > 0: #added by pdchristian to catch files with "~" in file name
+            file_content = "Empty due to ~ in file name." #added by pdchristian to catch files with "~" in file name
+            print("Document title with ~: "+file) #added by pdchristian to catch files with "~" in file name        
+        elif file.endswith(".pdf"): #added by pdchristian to catch files with "~" in file name
+        #if file.endswith(".pdf"):
             print("indexing "+file)
-            reader = PyPDF2.PdfReader(file)
-            for i in range(0,len(reader.pages)):
-                file_content = file_content + " "+reader.pages[i].extract_text()
+            try:    #added by pdchristian to catch decryption error
+                reader = PyPDF2.PdfReader(file)
+                for i in range(0,len(reader.pages)):
+                    file_content = file_content + " "+reader.pages[i].extract_text()
+            except Exception as exc: #added by pdchristian to catch decryption error
+                file_content = "Empty due to extraction error." #added by pdchristian to catch decryption error
         elif file.endswith(".txt") or file.endswith(".md") or file.endswith(".markdown"):
             print("indexing " + file)
-            f = open(file,'r')
+            f = open(file,'r',encoding='utf-8',errors='ignore') #added by pdchristian encoding='utf-8',errors='ignore'
             file_content = f.read()
             f.close()
         elif file.endswith(".docx"):
@@ -81,9 +97,13 @@ def main_indexing(mypath):
             metadata.append({"path":file})
         qdrant.add_texts(texts,metadatas=metadata)
         len(texts)
-    print(onlyfiles)
+    #print(onlyfiles)
     print("Finished indexing!")
 
+#Fixed Folder
+#main_indexing("TestFolder")
+
+#Folder from command line: python index.py path/to/folder or python index.py "X:/Christian/SV"
 if __name__ == "__main__":
     arguments = sys.argv
     if len(arguments)>1:
