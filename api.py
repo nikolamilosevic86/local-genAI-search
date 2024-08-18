@@ -10,6 +10,7 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 import environment_var
 import os
 from openai import OpenAI
+#from langchain_community.llms import Ollama
 #from langgraph.graph import END, MessageGraph
 
 class Item(BaseModel):
@@ -35,10 +36,15 @@ if environment_var.nvidia_key !="":
     client_ai = OpenAI(
         base_url="https://integrate.api.nvidia.com/v1",
         api_key=environment_var.nvidia_key
+#        base_url="http://localhost:11434", #pdchristian tried to connect to local ollama server
+#        api_key="ollama" #pdchristian tried to connect to local ollama server
+#        base_url="http://localhost:1234", #pdchristian tried to connect to local LM-Studio server
+#        api_key=environment_var.nvidia_key #pdchristian tried to connect to local LM-Studio server
     )
     use_nvidia_api = True
 elif use_quantized:
     model_id = "Kameshr/LLAMA-3-Quantized"
+#    model_id = "llama3.1"
     tokenizer = AutoTokenizer.from_pretrained(model_id)
     model = AutoModelForCausalLM.from_pretrained(
         model_id,
@@ -47,6 +53,8 @@ elif use_quantized:
     )
 else:
     model_id = "meta-llama/Meta-Llama-3-8B-Instruct"
+#    model_id = "llama3.1"
+#    model_id = "lmstudio-community/Meta-Llama-3.1-8B-Instruct-GGUF"
     tokenizer = AutoTokenizer.from_pretrained(model_id)
     model = AutoModelForCausalLM.from_pretrained(
         model_id,
