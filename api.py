@@ -19,7 +19,8 @@ class Item(BaseModel):
 
 #model_name = "amberoad/bert-multilingual-passage-reranking-msmarco"
 model_name = "sentence-transformers/msmarco-bert-base-dot-v5"
-model_kwargs = {'device': 'cpu'}
+model_kwargs = {'device': 'cuda'} # changed by pdchristian to 'cuda'
+#model_kwargs = {'device': 'cpu'}
 encode_kwargs = {'normalize_embeddings': True}
 hf = HuggingFaceEmbeddings(
     model_name=model_name,
@@ -70,7 +71,7 @@ async def root():
 def search(Item:Item):
     query = Item.query
     search_result = qdrant.similarity_search(
-        query=query, k=10
+        query=query, k=20
     )
     i = 0
     list_res = []
@@ -82,7 +83,7 @@ def search(Item:Item):
 async def ask_localai(Item:Item):
     query = Item.query
     search_result = qdrant.similarity_search(
-        query=query, k=10
+        query=query, k=20
     )
     i = 0
     list_res = []
@@ -96,7 +97,8 @@ async def ask_localai(Item:Item):
         i = i +1
 
     rolemsg = {"role": "system",
-               "content": "Answer user's question using documents given in the context. In the context are documents that should contain an answer. Please always reference document id (in squere brackets, for example [0],[1]) of the document that was used to make a claim. Use as many citations and documents as it is necessary to answer question."}
+               "content": "Answer user's question using documents given in the context. Formulate all answers in German. In the context are documents that should contain an answer. Please always reference document id (in squere brackets, for example [0],[1]) of the document that was used to make a claim. Use as many citations and documents as it is necessary to answer question."}
+    #           "content": "Answer user's question using documents given in the context. In the context are documents that should contain an answer. Please always reference document id (in squere brackets, for example [0],[1]) of the document that was used to make a claim. Use as many citations and documents as it is necessary to answer question."}
     messages = [
         rolemsg,
         {"role": "user", "content": "Documents:\n"+context+"\n\nQuestion: "+query},
