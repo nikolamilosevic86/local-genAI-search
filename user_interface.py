@@ -4,7 +4,7 @@ import requests
 import json
 st.title('_:blue[Local GenAI Search]_ :sunglasses:')
 question = st.text_input("Ask a question based on your local files", "")
-if st.button("Ask a question"):
+if st.button("Ask a question") or not question=="":
     st.write("The current question is \"", question+"\"")
     url = "http://127.0.0.1:8000/ask_localai"
 
